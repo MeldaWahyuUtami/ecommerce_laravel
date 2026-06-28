@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Admin;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,15 +16,17 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'user1',
             'email' => 'user@gmail.com',
-            'password' => bcrypt('123456789'),
+            'password' => Hash::make('123456789'),
             'point' => 10000,
+            'role' => 'user',
         ]);
 
-        Admin::create([
+        User::create([
             'name' => 'admin',
-            'username' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('123456789'),
+            'password' => Hash::make('123456789'),
+            'point' => 10000,
+            'role' => 'admin',
         ]);
     }
 }

@@ -8,11 +8,19 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+    /**
+     * Dashboard admin
+     */
     public function dashboard()
     {
-        $products = Product::count();
-        $users = User::count();
+        // hitung data
+        $productsCount = Product::count();
+        $usersCount = User::count();
 
-        return view('pages.admin.index', compact('products', 'users'));
+        // kirim ke view admin dashboard
+        return view('pages.admin.index', [
+            'products' => $productsCount,
+            'users' => $usersCount
+        ]);
     }
 }

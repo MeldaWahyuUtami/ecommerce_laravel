@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Admin;
 
 class AuthController extends Controller
 {
-    // ================= REGISTER =================
     public function register()
     {
         return view('auth.register');
@@ -29,48 +27,46 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'point' => 10000,
+            'role' => 'user'
         ]);
 
-        Auth::guard('web')->login($user);
+        Auth::login($user);
 
-        return redirect()->route('user.dashboard');
+        return redirect('/user/dashboard');
     }
 
-    // ================= LOGIN USER / ADMIN =================
     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:8',
+            'password' => 'required'
         ]);
 
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
-
-        // Coba login sebagai ADMIN
-        if (Auth::guard('admin')->attempt($credentials)) {
+        // LOGIN ADMIN (GUARD ADMIN)
+        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
 
             $request->session()->regenerate();
 
-            return redirect()->route('admin.dashboard');
+            session(['role' => 'admin']);
+
+            return redirect('/admin/dashboard');
         }
 
-        // Kalau bukan admin, coba login sebagai USER
-        if (Auth::guard('web')->attempt($credentials)) {
+        // LOGIN USER (GUARD WEB)
+        if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
 
             $request->session()->regenerate();
 
-            return redirect()->route('user.dashboard');
+            session(['role' => 'user']);
+
+            return redirect('/user/dashboard');
         }
 
         return back()->withErrors([
-            'user' => 'Email atau password salah!'
-        ])->withInput();
+            'email' => 'Email atau password salah!'
+        ]);
     }
 
-    // ================= LOGOUT ADMIN =================
     public function admin_logout()
     {
         Auth::guard('admin')->logout();
@@ -81,7 +77,6 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    // ================= LOGOUT USER =================
     public function user_logout()
     {
         Auth::guard('web')->logout();
