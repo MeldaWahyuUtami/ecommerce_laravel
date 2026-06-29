@@ -60,8 +60,18 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/product/delete/{id}', [ProductController::class, 'delete'])
         ->name('admin.product.delete');
 
+    /*
+    |---------------------------------------
+    | 🔥 FIX INI YANG HILANG SEBELUMNYA
+    |---------------------------------------
+    */
+
     Route::get('/distributor', [DistributorController::class, 'index'])
         ->name('admin.distributor');
+
+    // ✅ TAMBAHAN PENTING (INI YANG BIKIN ERROR KAMU)
+    Route::get('/distributor/create', [DistributorController::class, 'create'])
+        ->name('admin.distributor.create');
 
     Route::post('/distributor/import', [DistributorController::class, 'import'])
         ->name('admin.distributor.import');
@@ -84,7 +94,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| USER (FIX FINAL IMPORTANT PART)
+| USER
 |--------------------------------------------------------------------------
 */
 Route::prefix('user')->middleware('auth:web')->group(function () {
@@ -98,7 +108,6 @@ Route::prefix('user')->middleware('auth:web')->group(function () {
     Route::get('/product/detail/{id}', [UserController::class, 'detail'])
         ->name('user.detail.product');
 
-    // 🔥 FIX FINAL: ONLY 1 PARAMETER
     Route::get('/product/purchase/{productId}', [UserController::class, 'purchase'])
         ->name('user.product.purchase');
 

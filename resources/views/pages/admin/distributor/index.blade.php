@@ -22,12 +22,11 @@
             {{-- BUTTON TAMBAH & EXPORT --}}
             <div class="col-md-4">
 
-                {{-- FIX: tombol sekarang sudah benar --}}
-                <a href="{{ route('distributor.create') }}" class="btn btn-primary">
+                <a href="{{ route('admin.distributor.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Distributor
                 </a>
 
-                <a href="{{ route('distributor.export') }}" class="btn btn-info">
+                <a href="{{ route('admin.distributor.export') }}" class="btn btn-info">
                     <i class="fas fa-print"></i> Export
                 </a>
 
@@ -35,7 +34,7 @@
 
             {{-- FORM IMPORT --}}
             <div class="col-md-8">
-                <form action="{{ route('distributor.import') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.distributor.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="d-flex align-items-center">
